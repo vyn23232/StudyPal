@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: studypal-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DB_HOST
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_PORT
+        value: 3306
+      - key: FRONTEND_URL
+        sync: false
+
+databases:
+  - name: studypal-db
+    databaseName: studypal_db
+    user: studypal
