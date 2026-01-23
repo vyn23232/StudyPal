@@ -11,27 +11,28 @@ class OpenAIService {
   async explainConcept(topic, style = 'simple') {
     try {
       const prompts = {
-        simple: `Explain "${topic}" in simple, beginner-friendly language. Use clear definitions and avoid jargon. Keep it concise and easy to understand for students with minimal prior knowledge. If it involves code:
-1) Provide complete, working code examples with proper formatting using markdown code blocks with language specification (e.g., \`\`\`java, \`\`\`python)
-2) After the code, show the EXACT expected output/result that would appear when running this code in a separate code block (use \`\`\`output)
-3) Ensure the output is 100% accurate and matches what the code would actually produce`,
+        simple: `Explain "${topic}" in simple, beginner-friendly language. Use clear definitions and avoid jargon. Keep it concise and easy to understand for students with minimal prior knowledge. 
+
+IMPORTANT: Focus on LOGICAL EXPLANATIONS and DEFINITIONS only. Do NOT include code examples. Explain concepts theoretically using clear language and examples from real-world scenarios. If the topic is about programming, explain the logic and concept without writing actual code.`,
         
-        analogy: `Explain "${topic}" using a clear, relatable real-world analogy. Make it memorable and easy to understand. Start with the analogy, then connect it to the concept. If it involves code:
-1) Include complete, working code examples using markdown code blocks with language specification (e.g., \`\`\`java, \`\`\`python)
-2) After the code, show the EXACT expected output/result that would appear when running this code in a separate code block (use \`\`\`output)
-3) Ensure the output is 100% accurate and matches what the code would actually produce`,
+        analogy: `Explain "${topic}" using a clear, relatable real-world analogy. Make it memorable and easy to understand. Start with the analogy, then connect it to the concept. 
+
+IMPORTANT: Use ANALOGIES and COMPARISONS only. Do NOT include code examples. Help students understand through real-world parallels and metaphors.`,
         
-        stepByStep: `Break down "${topic}" into clear, numbered steps. For each step, explain simply and logically. If it involves code or programming:
+        stepByStep: `Break down "${topic}" into clear, numbered steps. For each step, explain simply and logically. 
+
+If the user specifically asks about code or programming implementation:
 1) Show complete, working, executable code using markdown code blocks with language specification (e.g., \`\`\`java, \`\`\`python, \`\`\`javascript)
 2) Break down the code step by step
 3) Explain what each part does
 4) After the complete code example, include the EXACT output/result that would appear when running this code in a separate code block labeled as \`\`\`output
 5) The output must be 100% accurate - show exactly what would print/display/return when this code runs
-6) Make it easy to follow for exam preparation
 
-IMPORTANT: Verify the output matches the code logic precisely. No placeholder or example outputs - only real, accurate results.`,
+If the topic is conceptual (not explicitly requesting code), provide step-by-step logical explanations without code examples.`,
         
-        examReady: `Provide a concise, exam-focused explanation of "${topic}". If it involves code or programming:
+        examReady: `Provide a concise, exam-focused explanation of "${topic}". 
+
+If it involves code or programming, OR if the user explicitly requests code-related help:
 1) Provide a complete, working, executable code example using markdown code blocks (e.g., \`\`\`java for Java, \`\`\`python for Python)
 2) Immediately after the code, show the EXACT output/result that would appear when running this code in a separate code block (use \`\`\`output)
 3) The output must be 100% accurate - show precisely what would print/display/return when executing this code
