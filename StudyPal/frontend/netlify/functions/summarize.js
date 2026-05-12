@@ -14,22 +14,25 @@ export async function handler(event) {
     return { statusCode: 500, body: JSON.stringify({ error: 'API key not configured' }) }
   }
 
-  const systemPrompt = `You are StudyPal, an AI study assistant. Summarize the provided study notes in a clear, structured, exam-focused format. Use markdown formatting:
+  const prompt = `You are StudyPal, an AI study assistant. Summarize the provided study notes in a clear, structured, exam-focused format. Use markdown formatting:
 - ## for the title
 - ### for sections like "Key Points", "Important Terms", "Quick Review"
 - **bold** for emphasis
 - Bullet points for key ideas
-Extract key points, definitions, and important concepts. Keep it concise and memorization-friendly.`
+Extract key points, definitions, and important concepts. Keep it concise and memorization-friendly.
+
+Summarize these study notes for exam preparation:
+
+${notes}`
 
   try {
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          system_instruction: { parts: [{ text: systemPrompt }] },
-          contents: [{ parts: [{ text: `Summarize these study notes for exam preparation:\n\n${notes}` }] }],
+          contents: [{ parts: [{ text: prompt }] }],
           generationConfig: { temperature: 0.5, maxOutputTokens: 1500 }
         })
       }
@@ -38,7 +41,8 @@ Extract key points, definitions, and important concepts. Keep it concise and mem
     const data = await response.json()
 
     if (!response.ok) {
-      return { statusCode: 502, body: JSON.stringify({ error: 'AI request failed' }) }
+      console.log('Gemini API error:', JSON.stringify(data))
+      return { statusCode: 502, body: JSON.stringify({ error: 'AI request failed', details: data?.error?.message }) }
     }
 
     const summary = data.candidates?.[0]?.content?.parts?.[0]?.text
@@ -52,6 +56,7 @@ Extract key points, definitions, and important concepts. Keep it concise and mem
       body: JSON.stringify({ success: true, summary })
     }
   } catch (err) {
-    return { statusCode: 500, body: JSON.stringify({ error: 'Server error' }) }
+    console.log('Function error:', err.message)
+    return { statusCode: 500, body: JSON.stringify({ error: 'Server error', details: err.message }) }
   }
 }
