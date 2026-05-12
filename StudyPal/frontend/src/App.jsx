@@ -18,7 +18,7 @@ function App() {
             className={`tab-btn ${activeTab === 'explain' ? 'active' : ''}`}
             onClick={() => setActiveTab('explain')}
           >
-            Explain Concept
+            Ask StudyPal
           </button>
           <button 
             className={`tab-btn ${activeTab === 'summarize' ? 'active' : ''}`}
@@ -45,8 +45,8 @@ function App() {
 
       <footer className="footer">
         <div className="container text-center">
-          <p>StudyPal © 2025 | Your AI Study Companion</p>
-          <p className="footer-credit">Built by Vyn</p>
+          <p>StudyPal © 2026 | Your AI Study Companion</p>
+          <p className="footer-credit">Built by JTFS</p>
         </div>
       </footer>
     </div>
