@@ -29,39 +29,20 @@
   font-size: 0.9rem;
 }
 
-.style-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+.ask-input-row {
+  display: flex;
   gap: 12px;
-  margin-bottom: 24px;
+  align-items: stretch;
 }
 
-.style-btn {
-  background-color: var(--bg-primary);
-  border: 3px solid var(--border);
-  padding: 16px;
-  text-align: left;
-  transition: all 0.2s ease;
+.ask-input-row input {
+  flex: 1;
 }
 
-.style-btn:hover {
-  border-color: var(--text-secondary);
-}
-
-.style-btn.active {
-  border-color: var(--accent);
-  background-color: rgba(0, 255, 0, 0.05);
-}
-
-.style-label {
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--text-primary);
-}
-
-.style-desc {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
+.ask-input-row .btn {
+  white-space: nowrap;
+  padding-left: 32px;
+  padding-right: 32px;
 }
 
 .error-message {
@@ -230,23 +211,14 @@
     font-size: 0.9rem;
   }
   
-  .style-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
+  .ask-input-row {
+    flex-direction: column;
   }
-  
-  .style-btn {
+
+  .ask-input-row .btn {
     padding: 12px;
   }
-  
-  .style-label {
-    font-size: 0.95rem;
-  }
-  
-  .style-desc {
-    font-size: 0.8rem;
-  }
-  
+
   .code-block {
     font-size: 0.8rem;
     padding: 16px;

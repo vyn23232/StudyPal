@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import './SummarizeNotes.css'
-
-const API_URL = 'http://localhost:5000/api'
+import { summarizeNotes as summarizeNotesService } from '../services/studyService.js'
 
 function SummarizeNotes() {
   const [notes, setNotes] = useState('')
@@ -74,23 +73,14 @@ function SummarizeNotes() {
     setSummary('')
 
     try {
-      const response = await fetch(`${API_URL}/study/summarize`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ notes })
-      })
-
-      const data = await response.json()
-
+      const data = await summarizeNotesService(notes)
       if (data.success) {
         setSummary(data.summary)
       } else {
         setError('Failed to generate summary')
       }
     } catch (err) {
-      setError('Failed to connect to server. Make sure the backend is running.')
+      setError('Something went wrong. Please try again.')
       console.error('Error:', err)
     } finally {
       setLoading(false)

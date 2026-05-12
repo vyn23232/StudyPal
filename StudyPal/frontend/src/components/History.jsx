@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import './History.css'
-
-const API_URL = 'http://localhost:5000/api'
+import { getHistory, clearHistory } from '../services/storageService.js'
 
 function History() {
   const [history, setHistory] = useState([])
@@ -62,29 +61,27 @@ function History() {
     return text
   }
 
-  useEffect(() => {
-    fetchHistory()
-  }, [])
-
-  const fetchHistory = async () => {
+  const loadHistory = () => {
     setLoading(true)
     setError('')
-
     try {
-      const response = await fetch(`${API_URL}/study/history`)
-      const data = await response.json()
-
-      if (data.success) {
-        setHistory(data.history || [])
-      } else {
-        setError('Failed to load history')
-      }
+      const data = getHistory()
+      setHistory(data)
     } catch (err) {
-      setError('Failed to connect to server')
+      setError('Failed to load history')
       console.error('Error:', err)
     } finally {
       setLoading(false)
     }
+  }
+
+  useEffect(() => {
+    loadHistory()
+  }, [])
+
+  const handleClear = () => {
+    clearHistory()
+    setHistory([])
   }
 
   const formatDate = (dateString) => {
@@ -100,6 +97,8 @@ function History() {
 
   const getStyleLabel = (style) => {
     const labels = {
+      ask: 'Ask',
+      summary: 'Summary',
       simple: 'Simple',
       analogy: 'Analogy',
       stepByStep: 'Step-by-Step',
@@ -124,6 +123,11 @@ function History() {
       <div className="section-header">
         <h2>Study History</h2>
         <p>Review your recent explanations and summaries</p>
+        {history.length > 0 && (
+          <button className="btn" onClick={handleClear} style={{ marginTop: '0.5rem' }}>
+            Clear History
+          </button>
+        )}
       </div>
 
       {error && <div className="error-message">{error}</div>}
